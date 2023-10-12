@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 
 class PreloadDataItem(models.Model):
@@ -41,6 +43,7 @@ class Income(models.Model):
     amount = models.IntegerField(verbose_name="Сумма дохода", default=0)
     currency = models.ForeignKey(verbose_name="Валюта", to=Currency, on_delete=models.PROTECT)
     category = models.ForeignKey(verbose_name="Категория", to=Category, on_delete=models.PROTECT)
+    user = models.ForeignKey(verbose_name="Пользователь", to=User, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f'Доход({self.category}: {self.amount})'
@@ -55,6 +58,7 @@ class Expense(models.Model):
     amount = models.IntegerField(verbose_name="Сумма расхода", default=0)
     currency = models.ForeignKey(verbose_name="Валюта", to=Currency, on_delete=models.PROTECT)
     category = models.ForeignKey(verbose_name="Категория", to=Category, on_delete=models.PROTECT)
+    user = models.ForeignKey(verbose_name="Пользователь", to=User, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f'Расход({self.category}: {self.amount})'
@@ -62,4 +66,3 @@ class Expense(models.Model):
     class Meta:
         verbose_name = "Расход"
         verbose_name_plural = "Расходы"
-

@@ -13,6 +13,8 @@ router.register(r'currencies', views.CurrencyViewSet)
 router.register(r'incomes', views.IncomeViewSet)
 router.register(r'expenses', views.ExpenseViewSet)
 router.register(r'history', views.HistoryViewSet, basename='histories')
+router.register(r'users/data', views.UserDataViewSet, basename='users')
+router.register(r'users/statistics', views.UserStatisticsViewSet, basename='users')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -1,14 +1,16 @@
 from rest_framework import viewsets
+from rest_framework.response import Response
 
-from .models import PreloadDataItem, Category, Currency, Income, Expense
+from .models import PreloadDataItem, Category, Currency, Income, Expense, User
 from .serializers import (
     PreloadDataItemSerializer,
     CategorySerializer,
     CurrencySerializer,
     IncomeSerializer,
-    ExpenseSerializer
+    ExpenseSerializer,
+    UserSerializer
 )
-from drf_multiple_model.views import FlatMultipleModelAPIView, ObjectMultipleModelAPIView
+
 from drf_multiple_model.viewsets import FlatMultipleModelAPIViewSet
 
 
@@ -70,3 +72,38 @@ class HistoryViewSet(FlatMultipleModelAPIViewSet):
             'serializer_class': ExpenseSerializer
         },
     ]
+
+
+class UserDataViewSet(viewsets.ViewSet):
+    queryset = User.objects.all()
+    def retrieve(self, request, pk=None):
+        user = User.objects.get(pk=pk)
+        expenses = Expense.objects.filter(user=user)
+        incomes = Income.objects.filter(user=user)
+
+        expense_serializer = ExpenseSerializer(expenses, many=True)
+        income_serializer = IncomeSerializer(incomes, many=True)
+
+        data = expense_serializer.data + income_serializer.data
+        return Response(data)
+
+
+class UserStatisticsViewSet(viewsets.ViewSet):
+    def retrieve(self, request, pk=None):
+        user = User.objects.get(pk=pk)
+
+        expenses = Expense.objects.filter(user=user)
+        incomes = Income.objects.filter(user=user)
+
+        expenses_total = sum([i.amount for i in expenses])
+        incomes_total = sum([i.amount for i in incomes])
+
+        balance = incomes_total - expenses_total
+
+        data = {
+            "expenses_total": expenses_total,
+            "incomes_total": incomes_total,
+            "balance": balance
+        }
+
+        return Response(data)

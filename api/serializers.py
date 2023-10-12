@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from .models import PreloadDataItem, Category, Currency, Income, Expense
@@ -36,7 +37,7 @@ class IncomeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Income
-        fields = ['pk', 'amount', 'created_at', 'currency', 'category']
+        fields = ['pk', 'amount', 'created_at', 'currency', 'category', 'user']
 
 
 class ExpenseSerializer(serializers.ModelSerializer):
@@ -54,4 +55,10 @@ class ExpenseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Expense
-        fields = ['pk', 'amount', 'created_at', 'currency', 'category']
+        fields = ['pk', 'amount', 'created_at', 'currency', 'category', 'user']
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("pk", "username")
