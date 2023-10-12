@@ -1,6 +1,6 @@
 import requests
+import json
 from bs4 import BeautifulSoup
-
 
 BASE_URL = "https://uznews.uz"
 
@@ -30,5 +30,16 @@ def get_top_news(url=BASE_URL):
     return result
 
 
+# def save_to_json():
+#     with open("../news.json", mode="w", encoding="utf-8") as file:
+#         data = get_top_news()
+#         json.dump(data, file, indent=4, ensure_ascii=False)
+#
+#
+# save_to_json()
 
 
+def read_from_json(filename):
+    with open(filename, mode="r", encoding="utf-8") as file:
+        data = json.load(file)
+        return data
