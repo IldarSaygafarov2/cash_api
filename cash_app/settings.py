@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-%zaluc!snulz$@+*okh*giqs62m-!%#3um9(ii+_jjpd)mwrm$
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "cashapi.pythonanywhere.com"
+    "cashapi.pythonanywhere.com",
+    "127.0.0.1"
 ]
 
 # Application definition

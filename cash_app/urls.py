@@ -16,6 +16,8 @@ router.register(r'history', views.HistoryViewSet, basename='histories')
 router.register(r'users/data', views.UserDataViewSet, basename='users')
 router.register(r'users/statistics', views.UserStatisticsViewSet, basename='users')
 
+router.urls.append(path("news/", views.get_news))
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),

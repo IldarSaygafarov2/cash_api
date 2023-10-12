@@ -1,6 +1,7 @@
 from rest_framework import viewsets
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
+from .utils import get_top_news
 from .models import PreloadDataItem, Category, Currency, Income, Expense, User
 from .serializers import (
     PreloadDataItemSerializer,
@@ -107,3 +108,8 @@ class UserStatisticsViewSet(viewsets.ViewSet):
         }
 
         return Response(data)
+
+
+@api_view(["GET"])
+def get_news(request):
+    return Response(get_top_news())
