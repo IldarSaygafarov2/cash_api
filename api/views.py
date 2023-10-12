@@ -12,6 +12,8 @@ from .serializers import (
     UserSerializer
 )
 
+from django.conf import settings
+import os
 from drf_multiple_model.viewsets import FlatMultipleModelAPIViewSet
 
 
@@ -112,5 +114,7 @@ class UserStatisticsViewSet(viewsets.ViewSet):
 
 @api_view(["GET"])
 def get_news(request):
-    data = read_from_json("news.json")
+    path = os.path.join(settings.BASE_DIR, "news.json")
+    data = read_from_json(path)
+
     return Response(data)
