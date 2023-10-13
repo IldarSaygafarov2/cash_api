@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .utils import read_from_json
-from .models import PreloadDataItem, Category, Currency, Income, Expense, User
+from .models import PreloadDataItem, Category, Currency, Income, Expense, CustomUser
 from .serializers import (
     PreloadDataItemSerializer,
     CategorySerializer,
@@ -11,11 +11,10 @@ from .serializers import (
     ExpenseSerializer,
     UserSerializer
 )
-
+from rest_framework import generics
 from django.conf import settings
 import os
 from drf_multiple_model.viewsets import FlatMultipleModelAPIViewSet
-
 
 
 class PreloadDataItemViewSet(viewsets.ModelViewSet):
@@ -78,9 +77,10 @@ class HistoryViewSet(FlatMultipleModelAPIViewSet):
 
 
 class UserDataViewSet(viewsets.ViewSet):
-    queryset = User.objects.all()
+    queryset = CustomUser.objects.all()
+
     def retrieve(self, request, pk=None):
-        user = User.objects.get(pk=pk)
+        user = CustomUser.objects.get(pk=pk)
         expenses = Expense.objects.filter(user=user)
         incomes = Income.objects.filter(user=user)
 
@@ -93,7 +93,7 @@ class UserDataViewSet(viewsets.ViewSet):
 
 class UserStatisticsViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
-        user = User.objects.get(pk=pk)
+        user = CustomUser.objects.get(pk=pk)
 
         expenses = Expense.objects.filter(user=user)
         incomes = Income.objects.filter(user=user)
@@ -118,3 +118,30 @@ def get_news(request):
     data = read_from_json(path)
 
     return Response(data)
+
+
+class UserAccountCreateView(generics.ListCreateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserAccountUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        user = CustomUser.objects.get(pk=kwargs["pk"])
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+
+@api_view(["POST"])
+def login_user(request):
+    data = request.data
+    user = CustomUser.objects.filter(email=data["email"]).first()
+
+    if user is None:
+        return Response({"status": False})
+
+    serializer = UserSerializer(user)
+    return Response({"status": True, **serializer.data})

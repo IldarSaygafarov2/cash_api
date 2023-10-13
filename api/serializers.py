@@ -1,7 +1,7 @@
-from django.contrib.auth.models import User
+
 from rest_framework import serializers
 
-from .models import PreloadDataItem, Category, Currency, Income, Expense
+from .models import PreloadDataItem, Category, Currency, Income, Expense, CustomUser
 
 
 class PreloadDataItemSerializer(serializers.ModelSerializer):
@@ -60,5 +60,5 @@ class ExpenseSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ("pk", "username")
+        model = CustomUser
+        fields = ("pk", "username", "email", "password", "avatar")
