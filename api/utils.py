@@ -1,3 +1,5 @@
+import random
+
 import requests
 import json
 from bs4 import BeautifulSoup
@@ -43,3 +45,7 @@ def read_from_json(filename):
     with open(filename, mode="r", encoding="utf-8") as file:
         data = json.load(file)
         return data
+
+
+def generate_code():
+    return ''.join(random.sample([f"{i}" for i in range(10)], 6))

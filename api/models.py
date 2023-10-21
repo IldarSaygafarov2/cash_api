@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser
 class CustomUser(AbstractUser):
     # username = models.CharField(max_length=255, blank=True, null=True)
     avatar = models.ImageField(verbose_name="Аватар", upload_to="users/avatars/", null=True, blank=True)
+    code = models.CharField(verbose_name="Код авторизации", max_length=6, default="")
 
     def __str__(self):
         return self.username

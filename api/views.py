@@ -1,7 +1,12 @@
+import os
+
+from django.conf import settings
+from drf_multiple_model.viewsets import FlatMultipleModelAPIViewSet
+from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .utils import read_from_json
+
 from .models import PreloadDataItem, Category, Currency, Income, Expense, CustomUser
 from .serializers import (
     PreloadDataItemSerializer,
@@ -11,10 +16,8 @@ from .serializers import (
     ExpenseSerializer,
     UserSerializer
 )
-from rest_framework import generics
-from django.conf import settings
-import os
-from drf_multiple_model.viewsets import FlatMultipleModelAPIViewSet
+from .utils import read_from_json, generate_code
+from django.core.mail import send_mail
 
 
 class PreloadDataItemViewSet(viewsets.ModelViewSet):
@@ -138,10 +141,36 @@ class UserAccountUpdateView(generics.RetrieveUpdateAPIView):
 @api_view(["POST"])
 def login_user(request):
     data = request.data
-    user = CustomUser.objects.filter(email=data["email"]).first()
+    user = CustomUser.objects.filter(
+        email=data["email"],
+        password=data["password"]
+    ).first()
 
     if user is None:
         return Response({"status": False})
+
+    code = generate_code()
+    user.code = code
+    user.save()
+
+    send_mail(
+        subject="Код для подтверждения авторизации",
+        message=f"Ваш код для авторизации: {code}",
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[user.email]
+    )
+
+    return Response({"status": True})
+
+
+@api_view(["POST"])
+def check_user_by_code(request):
+    data = request.data
+
+    user = CustomUser.objects.filter(code=data["code"]).first()
+
+    if user is None:
+        return Response({"status": True})
 
     serializer = UserSerializer(user)
     return Response({"status": True, **serializer.data})

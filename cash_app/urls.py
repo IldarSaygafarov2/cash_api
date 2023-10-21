@@ -20,6 +20,7 @@ router.register(r'users/statistics', views.UserStatisticsViewSet, basename='user
 router.urls.append(path("news/", views.get_news))
 router.urls.append(path("users/list/", views.UserAccountCreateView.as_view()))
 router.urls.append(path("users/list/update/<str:pk>/", views.UserAccountUpdateView.as_view()))
+router.urls.append(path("users/check/", views.check_user_by_code))
 router.urls.append(path("users/login/", views.login_user))
 
 urlpatterns = [
