@@ -139,6 +139,8 @@ class NoteViewSet(viewsets.ModelViewSet):
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
 
+    # def retrieve(self, request, *args, **kwargs):
+
 
 @api_view(["GET"])
 def get_news(request):
