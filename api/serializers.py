@@ -1,6 +1,17 @@
 from rest_framework import serializers
 
-from .models import PreloadDataItem, Category, Currency, Income, Expense, CustomUser, Story, StoryImage
+from .models import PreloadDataItem, Category, Currency, Income, Expense, CustomUser, Story, Note
+
+
+class NoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Note
+        fields = ['pk', 'title', 'body', 'created_at', 'user']
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['created_at'] = f'{instance.created_at.date()} {instance.created_at.strftime("%H:%M:%S")}'
+        return data
 
 
 class StorySerializer(serializers.ModelSerializer):

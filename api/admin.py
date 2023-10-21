@@ -1,8 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 
-
-from .models import PreloadDataItem, Category, Income, Expense, Currency, CustomUser, Story,StoryImage
+from .models import PreloadDataItem, Category, Income, Expense, Currency, CustomUser, Story, StoryImage, Note
 
 
 class StoryImageInline(admin.TabularInline):
@@ -20,4 +19,5 @@ admin.site.register(Category)
 admin.site.register(Currency)
 admin.site.register(Income)
 admin.site.register(Expense)
+admin.site.register(Note)
 admin.site.register(Story, StoryImageAdmin)

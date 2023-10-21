@@ -7,7 +7,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .models import PreloadDataItem, Category, Currency, Income, Expense, CustomUser, Story
+from .models import PreloadDataItem, Category, Currency, Income, Expense, CustomUser, Story, Note
 from .serializers import (
     PreloadDataItemSerializer,
     CategorySerializer,
@@ -15,7 +15,8 @@ from .serializers import (
     IncomeSerializer,
     ExpenseSerializer,
     UserSerializer,
-    StorySerializer
+    StorySerializer,
+    NoteSerializer
 )
 from .utils import read_from_json, generate_code
 from django.core.mail import send_mail
@@ -132,6 +133,12 @@ class StoryViewSet(viewsets.ModelViewSet):
             }
             result.append(obj)
         return Response(result)
+
+
+class NoteViewSet(viewsets.ModelViewSet):
+    queryset = Note.objects.all()
+    serializer_class = NoteSerializer
+
 
 @api_view(["GET"])
 def get_news(request):

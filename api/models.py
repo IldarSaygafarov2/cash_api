@@ -102,3 +102,17 @@ class StoryImage(models.Model):
     class Meta:
         verbose_name = "Фотка истории"
         verbose_name_plural = "Фотки истории"
+
+
+class Note(models.Model):
+    title = models.CharField(verbose_name="Заголовок", max_length=255)
+    body = models.TextField(verbose_name="Описание")
+    created_at = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="notes", verbose_name="Пользователь")
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "Заметка"
+        verbose_name_plural = "Заметки"
