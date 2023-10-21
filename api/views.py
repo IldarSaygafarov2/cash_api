@@ -7,14 +7,15 @@ from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .models import PreloadDataItem, Category, Currency, Income, Expense, CustomUser
+from .models import PreloadDataItem, Category, Currency, Income, Expense, CustomUser, Story
 from .serializers import (
     PreloadDataItemSerializer,
     CategorySerializer,
     CurrencySerializer,
     IncomeSerializer,
     ExpenseSerializer,
-    UserSerializer
+    UserSerializer,
+    StorySerializer
 )
 from .utils import read_from_json, generate_code
 from django.core.mail import send_mail
@@ -115,6 +116,23 @@ class UserStatisticsViewSet(viewsets.ViewSet):
         return Response(data)
 
 
+class StoryViewSet(viewsets.ModelViewSet):
+    queryset = Story.objects.all()
+    serializer_class = StorySerializer
+
+    def list(self, request, *args, **kwargs):
+        result = []
+        for item in self.queryset:
+            obj = {
+                "pk": item.pk,
+                "title": item.title,
+                "images": [
+                    img.img.url for img in item.images.all()
+                ]
+            }
+            result.append(obj)
+        return Response(result)
+
 @api_view(["GET"])
 def get_news(request):
     path = os.path.join(settings.BASE_DIR, "news.json")
@@ -174,3 +192,4 @@ def check_user_by_code(request):
 
     serializer = UserSerializer(user)
     return Response({"status": True, **serializer.data})
+

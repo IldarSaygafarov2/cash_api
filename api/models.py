@@ -78,3 +78,27 @@ class Expense(models.Model):
     class Meta:
         verbose_name = "Расход"
         verbose_name_plural = "Расходы"
+
+
+class Story(models.Model):
+    title = models.CharField(verbose_name="Название", max_length=155, blank=True, null=True)
+
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "История"
+        verbose_name_plural = "Истории"
+
+
+class StoryImage(models.Model):
+    story = models.ForeignKey(Story, on_delete=models.CASCADE, verbose_name='История', related_name="images")
+    img = models.ImageField(verbose_name="Фото", upload_to="photos/stories/", blank=True, null=True)
+
+    def __str__(self):
+        return self.story.title
+
+    class Meta:
+        verbose_name = "Фотка истории"
+        verbose_name_plural = "Фотки истории"

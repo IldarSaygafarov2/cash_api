@@ -1,7 +1,12 @@
-
 from rest_framework import serializers
 
-from .models import PreloadDataItem, Category, Currency, Income, Expense, CustomUser
+from .models import PreloadDataItem, Category, Currency, Income, Expense, CustomUser, Story, StoryImage
+
+
+class StorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Story
+        fields = ["pk", "title"]
 
 
 class PreloadDataItemSerializer(serializers.ModelSerializer):
