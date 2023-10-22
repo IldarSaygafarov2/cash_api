@@ -197,7 +197,7 @@ def check_user_by_code(request):
     user = CustomUser.objects.filter(code=data["code"]).first()
 
     if user is None:
-        return Response({"status": True})
+        return Response({"status": False})
 
     serializer = UserSerializer(user)
     return Response({"status": True, **serializer.data})
