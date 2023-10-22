@@ -29,7 +29,7 @@ class PreloadDataItemSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['pk', 'name']
+        fields = ['pk', 'name', 'icon']
 
 
 class CurrencySerializer(serializers.ModelSerializer):
