@@ -77,4 +77,4 @@ class ExpenseSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ("pk", "username", "email", "password")
+        fields = ("pk", "username", "email", "password", "avatar")
