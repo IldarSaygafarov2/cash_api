@@ -20,6 +20,7 @@ router.register(r'users/data', views.UserDataViewSet, basename='users')
 router.register(r'users/statistics', views.UserStatisticsViewSet, basename='users')
 
 router.urls.append(path("news/", views.get_news))
+router.urls.append(path("users/<str:pk>/notes/", views.get_user_notes))
 router.urls.append(path("users/list/", views.UserAccountCreateView.as_view()))
 router.urls.append(path("users/list/update/<str:pk>/", views.UserAccountUpdateView.as_view()))
 router.urls.append(path("users/check/", views.check_user_by_code))

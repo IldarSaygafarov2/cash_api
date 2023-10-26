@@ -201,3 +201,10 @@ def check_user_by_code(request):
     serializer = UserSerializer(user)
     return Response({"status": True, **serializer.data})
 
+
+@api_view(["GET"])
+def get_user_notes(request, pk):
+    user = CustomUser.objects.get(pk=pk)
+    notes = Note.objects.filter(user=user)
+    serializer = NoteSerializer(notes, many=True)
+    return Response(serializer.data)
