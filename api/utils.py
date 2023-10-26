@@ -3,6 +3,7 @@ import random
 import requests
 import json
 from bs4 import BeautifulSoup
+from .models import Category, Currency
 
 BASE_URL = "https://uznews.uz"
 
@@ -49,3 +50,26 @@ def read_from_json(filename):
 
 def generate_code():
     return ''.join(random.sample([f"{i}" for i in range(10)], 6))
+
+
+def make_qs_list(qs, item_type):
+    result = []
+    for item in qs:
+        category = Category.objects.filter(pk=item['category_id']).values()
+        currency = Currency.objects.get(pk=item['currency_id'])
+
+        res = {
+            'id': item['id'],
+            'created_at': item['created_at'],
+            'amount': item['amount'],
+            'currency': currency.code,
+            'category': category.first(),
+            'user': item['user_id'],
+            'type': item_type
+        }
+
+        result.append(res)
+    return result
+
+
+

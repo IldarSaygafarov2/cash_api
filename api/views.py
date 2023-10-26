@@ -18,7 +18,7 @@ from .serializers import (
     StorySerializer,
     NoteSerializer
 )
-from .utils import read_from_json, generate_code
+from .utils import read_from_json, generate_code, make_qs_list
 from django.core.mail import send_mail
 
 
@@ -86,14 +86,13 @@ class UserDataViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, pk=None):
         user = CustomUser.objects.get(pk=pk)
-        expenses = Expense.objects.filter(user=user)
-        incomes = Income.objects.filter(user=user)
+        expenses = list(Expense.objects.filter(user=user).values())
+        incomes = list(Income.objects.filter(user=user).values())
 
-        expense_serializer = ExpenseSerializer(expenses, many=True)
-        income_serializer = IncomeSerializer(incomes, many=True)
+        expenses_copy = make_qs_list(expenses, 'expense')
+        incomes_copy = make_qs_list(incomes, 'income')
 
-        data = expense_serializer.data + income_serializer.data
-        return Response(data)
+        return Response(expenses_copy+incomes_copy)
 
 
 class UserStatisticsViewSet(viewsets.ViewSet):
