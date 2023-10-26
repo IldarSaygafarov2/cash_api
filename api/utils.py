@@ -60,7 +60,7 @@ def make_qs_list(qs, item_type):
 
         res = {
             'id': item['id'],
-            'created_at': item['created_at'],
+            'created_at': item['created_at'].timestamp(),
             'amount': item['amount'],
             'currency': currency.code,
             'category': category.first(),
