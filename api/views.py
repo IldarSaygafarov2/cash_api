@@ -18,7 +18,7 @@ from .serializers import (
     StorySerializer,
     NoteSerializer
 )
-from .utils import read_from_json, generate_code, make_qs_list, get_top_news
+from .utils import read_from_json, generate_code, make_qs_list
 from django.core.mail import send_mail
 
 
@@ -143,10 +143,10 @@ class NoteViewSet(viewsets.ModelViewSet):
 
 @api_view(["GET"])
 def get_news(request):
-    # path = os.path.join(settings.BASE_DIR, "news.json")
-    # data = read_from_json(path)
+    path = os.path.join(settings.BASE_DIR, "news.json")
+    data = read_from_json(path)
 
-    return Response(get_top_news())
+    return Response(data)
 
 
 class UserAccountCreateView(generics.ListCreateAPIView):
