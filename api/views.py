@@ -204,7 +204,13 @@ def check_user_by_code(request):
 
 @api_view(["GET"])
 def get_user_notes(request, pk):
+    query = request.GET.get('month')
+
     user = CustomUser.objects.get(pk=pk)
-    notes = Note.objects.filter(user=user)
+
+    if query:
+        notes = Note.objects.filter(created_at__month=int(query), user=user)
+    else:
+        notes = Note.objects.filter(user=user)
     serializer = NoteSerializer(notes, many=True)
     return Response(serializer.data)
