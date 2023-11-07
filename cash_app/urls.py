@@ -3,6 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from api import views
 
@@ -15,7 +16,6 @@ router.register(r'expenses', views.ExpenseViewSet)
 router.register(r'history', views.HistoryViewSet, basename='histories')
 router.register(r'stories', views.StoryViewSet, basename='stories')
 router.register(r'notes', views.NoteViewSet, basename='notes')
-# router.register(r'users/accounts', views.UserAccountView, basename='accounts')
 router.register(r'users/data', views.UserDataViewSet, basename='users')
 router.register(r'users/statistics', views.UserStatisticsViewSet, basename='users')
 
@@ -29,6 +29,8 @@ router.urls.append(path("users/login/", views.login_user))
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/schema/docs/', SpectacularSwaggerView.as_view(url_name='schema'))
 ]
 
 if settings.DEBUG:
